@@ -729,7 +729,7 @@ void sendAllCodes() {
 
 /// PIXMOB MENU ///
 MENU pixmob[] = {
-  { "Back", 1},
+  { "Back", 1, },
   { "red1", 2,},
   { "red2", 3},
   { "green1", 4},
@@ -870,18 +870,6 @@ void pixmob_loop(){
       case 22:
         data = AppleTVWirelessAudioSync;
         break;
-    }
-    if (current_proc == 8 && isSwitching == false){
-      DISP.fillScreen(BLACK);
-      DISP.setTextSize(MEDIUM_TEXT);
-      DISP.setCursor(5, 1);
-      DISP.println("AppleJuice");
-      DISP.setTextSize(SMALL_TEXT);
-      DISP.print("Advertising:\n");
-      DISP.print(pixmob[cursor].name);
-      DISP.print("\n\nNext: Exit");
-      isSwitching = true;
-      current_proc = 9; // Jump over to the AppleJuice BLE beacon loop
     }
   }
 }
