@@ -1286,7 +1286,7 @@ void aj_adv(){
 /// CREDITS ///
 void credits_setup(){
   DISP.fillScreen(WHITE);
-  DISP.qrcode("https://github.com/n0xa/m5stick-nemo", 145, 40, 100, 5);
+  DISP.qrcode("https://github.com/lucasbustamante/M5-DC3", 145, 40, 100, 5);
   DISP.setTextColor(BLACK, WHITE);
   DISP.setTextSize(MEDIUM_TEXT);
   DISP.setCursor(0, 25);
