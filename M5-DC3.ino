@@ -1,6 +1,6 @@
 #define STICK_C_PLUS
 //version
-String buildver="1.0.1";
+String buildver="1.0.3";
 
 //color display
 #define BGCOLOR BLACK
@@ -23,6 +23,7 @@ String buildver="1.0.1";
 #include <IRremoteESP8266.h>
 #include <IRsend.h>
 #include "applejuice.h"
+#include "pixmob.h"
 #include "WORLD_IR_CODES.h"
 #include "wifispam.h"
 #include <BLEUtils.h>
@@ -317,6 +318,12 @@ MENU smenu[] = {
 #if defined(ROTATION)
   { "Rotation", 7},
 #endif
+#if defined(USE_EEPROM)
+  { "Restart", 85},
+#endif
+#if defined(USE_EEPROM)
+  { "Shutdown", 86},
+#endif
   { "About", 10},
 #if defined(USE_EEPROM)
   { "Clear Settings", 99},
@@ -327,9 +334,19 @@ void smenu_drawmenu() {
   DISP.setTextSize(SMALL_TEXT);
   DISP.fillScreen(BLACK);
   DISP.setCursor(0, 8, 1);
-  for ( int i = 0 ; i < ( sizeof(smenu) / sizeof(MENU) ) ; i++ ) {
-    DISP.print((cursor == i) ? ">" : " ");
-    DISP.println(smenu[i].name);
+
+
+    if (cursor > 5) {
+    for ( int i = 0 + (cursor - 5) ; i < ( sizeof(smenu) / sizeof(MENU) ) ; i++ ) {
+      DISP.print((cursor == i) ? ">" : " ");
+      DISP.println(smenu[i].name);
+    }
+  } else {
+    for (
+      int i = 0 ; i < ( sizeof(smenu) / sizeof(MENU) ) ; i++ ) {
+      DISP.print((cursor == i) ? ">" : " ");
+      DISP.println(smenu[i].name);
+    }
   }
 }
 
@@ -359,6 +376,12 @@ void smenu_loop() {
       EEPROM.commit();
 #endif
       ESP.restart();
+    }
+        if(smenu[cursor].command == 85){
+M5.Axp.DeepSleep(5);
+    }
+            if(smenu[cursor].command == 86){
+M5.Axp.PowerOff();
     }
     current_proc = smenu[cursor].command;
   }
@@ -796,11 +819,11 @@ void pixmob_loop(){
     }
   }
   if (check_select_press() || maelstrom) {
-    deviceType = pixmob[cursor].command;
+    deviceTypea = pixmob[cursor].command;
     if (maelstrom) {
-      deviceType = random(1, 28);
+      deviceTypea = random(1, 28);
     }
-    switch(deviceType) {
+    switch(deviceTypea) {
       case 1:
         DISP.fillScreen(BLACK);
         rstOverride = false;
@@ -808,67 +831,67 @@ void pixmob_loop(){
         current_proc = 1;
         break;
       case 2:
-        data = AirpodsPro;
+        dataa = red1;
         break;
       case 3:
-        data = AirpodsMax;
+        dataa = red2;
         break;
       case 4:
-        data = AirpodsGen2;
+        dataa = green1;
         break;
       case 5:
-        data = AirpodsGen3;
+        dataa = green2;
         break;
       case 6:
-        data = AirpodsProGen2;
+        dataa = blue1;
         break;
       case 7:
-        data = PowerBeats;
+        dataa = blue2;
         break;
       case 8:
-        data = PowerBeatsPro;
+        dataa = magenta1;
         break;
       case 9:
-        data = BeatsSoloPro;
+        dataa = magenta2;
         break;
       case 10:
-        data = BeatsStudioBuds;
+        dataa = magenta3;
         break;
       case 11:
-        data = BeatsFlex;
+        dataa = yellow1;
         break;
       case 12:
-        data = BeatsX;
+        dataa = yellow2;
         break;
       case 13:
-        data = BeatsSolo3;
+        dataa = pink1;
         break;
       case 14:
-        data = BeatsStudio3;
+        dataa = pink2;
         break;
       case 15:
-        data = BeatsStudioPro;
+        dataa = orange1;
         break;
       case 16:
-        data = BeatsFitPro;
+        dataa = orange2;
         break;
       case 17:
-        data = BeatsStudioBudsPlus;
+        dataa = white1;
         break;
       case 18:
-        data = AppleTVSetup;
+        dataa = white2;
         break;
       case 19:
-        data = AppleTVPair;
+        dataa = turquoise1;
         break;
       case 20:
-        data = AppleTVNewUser;
+        dataa = turquoise2;
         break;
       case 21:
-        data = AppleTVAppleIDSetup;
+        dataa = turquoise3;
         break;
       case 22:
-        data = AppleTVWirelessAudioSync;
+        dataa = off;
         break;
     }
   }
@@ -1671,10 +1694,13 @@ void captive_portal_loop() {
       M5.Lcd.println(APIP);
       M5.Lcd.printf("SSID: %s\n", SSID_NAME);
       M5.Lcd.printf("Victim Count: %d\n", capcount);
-      M5.Lcd.printf("\n\nPress Power to Exit");
+      M5.Lcd.printf("\n\nPress Next to Exit");
     }
   }
   dnsServer.processNextRequest(); webServer.handleClient();
+    if (check_next_press()) {
+    M5.Axp.DeepSleep(5);
+  }
 }
 
 void qrmenu_setup() {

@@ -1,22 +1,3 @@
-/*
-Last Updated: 30 Mar. 2018
-By Anton Grimpelhuber (anton.grimpelhuber@gmail.com)
-Added discrete Samsung / NECv2 power off code_eu140Code
-
-TV-B-Gone for Arduino version 0.001
-Ported to Arduino by Ken Shirriff, Dec 3, 2009
-http://arcfn.com
-
-The original code is:
-TV-B-Gone Firmware version 1.2
- for use with ATtiny85v and v1.2 hardware
- (c) Mitch Altman + Limor Fried 2009
-
-*/
-
-//Codes captured from Generation 3 TV-B-Gone by Limor Fried & Mitch Altman
-//table of POWER codes
-
 #include "tvbg.h"
 
 const uint16_t code_na000Times[] = {
