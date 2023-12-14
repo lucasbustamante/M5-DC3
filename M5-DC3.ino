@@ -800,6 +800,8 @@ void pixmob_setup(){
   DISP.setTextSize(MEDIUM_TEXT);
   DISP.setCursor(5, 1);
   DISP.println("Pixmob");
+  irsend.begin();
+  digitalWrite(IRLED, HIGH);
   delay(1000);  
   cursor = 0;
   sourApple = false;
@@ -808,6 +810,14 @@ void pixmob_setup(){
   rstOverride = true;
   pixmob_drawmenu();
 }
+
+void acionarInfravermelho(uint16_t *dados, int tamanho) {
+  for (int i = 0; i < tamanho; i++) {
+    irsend.sendNEC(dados[i], 38);
+    delayMicroseconds(50);
+  }
+}
+
 
 void pixmob_loop(){
   if (!maelstrom){
@@ -831,67 +841,67 @@ void pixmob_loop(){
         current_proc = 1;
         break;
       case 2:
-        dataa = red1;
+        acionarInfravermelho(red1, sizeof(red1) / sizeof(uint16_t));
         break;
       case 3:
-        dataa = red2;
+        acionarInfravermelho(red2, sizeof(red2) / sizeof(uint16_t));
         break;
       case 4:
-        dataa = green1;
+        acionarInfravermelho(green1, sizeof(green1) / sizeof(uint16_t));
         break;
-      case 5:
-        dataa = green2;
+        case 5:
+        acionarInfravermelho(green2, sizeof(green2) / sizeof(uint16_t));
         break;
-      case 6:
-        dataa = blue1;
+        case 6:
+        acionarInfravermelho(blue1, sizeof(blue1) / sizeof(uint16_t));
         break;
-      case 7:
-        dataa = blue2;
+        case 7:
+        acionarInfravermelho(blue2, sizeof(blue2) / sizeof(uint16_t));
         break;
-      case 8:
-        dataa = magenta1;
+        case 8:
+        acionarInfravermelho(magenta1, sizeof(magenta1) / sizeof(uint16_t));
         break;
-      case 9:
-        dataa = magenta2;
+        case 9:
+        acionarInfravermelho(magenta2, sizeof(magenta2) / sizeof(uint16_t));
         break;
-      case 10:
-        dataa = magenta3;
+        case 10:
+        acionarInfravermelho(magenta3, sizeof(magenta3) / sizeof(uint16_t));
         break;
-      case 11:
-        dataa = yellow1;
+        case 11:
+        acionarInfravermelho(yellow1, sizeof(yellow1) / sizeof(uint16_t));
         break;
-      case 12:
-        dataa = yellow2;
+        case 12:
+        acionarInfravermelho(yellow2, sizeof(yellow2) / sizeof(uint16_t));
         break;
-      case 13:
-        dataa = pink1;
+        case 13:
+        acionarInfravermelho(pink1, sizeof(pink1) / sizeof(uint16_t));
         break;
-      case 14:
-        dataa = pink2;
+        case 14:
+        acionarInfravermelho(pink2, sizeof(pink2) / sizeof(uint16_t));
         break;
-      case 15:
-        dataa = orange1;
+        case 15:
+        acionarInfravermelho(orange1, sizeof(orange1) / sizeof(uint16_t));
         break;
-      case 16:
-        dataa = orange2;
+        case 16:
+        acionarInfravermelho(orange2, sizeof(orange2) / sizeof(uint16_t));
         break;
-      case 17:
-        dataa = white1;
+        case 17:
+        acionarInfravermelho(white1, sizeof(white1) / sizeof(uint16_t));
         break;
-      case 18:
-        dataa = white2;
+        case 18:
+        acionarInfravermelho(white2, sizeof(white2) / sizeof(uint16_t));
         break;
-      case 19:
-        dataa = turquoise1;
+        case 19:
+        acionarInfravermelho(turquoise1, sizeof(turquoise1) / sizeof(uint16_t));
         break;
-      case 20:
-        dataa = turquoise2;
+        case 20:
+        acionarInfravermelho(turquoise2, sizeof(turquoise2) / sizeof(uint16_t));
         break;
-      case 21:
-        dataa = turquoise3;
+        case 21:
+        acionarInfravermelho(turquoise3, sizeof(turquoise3) / sizeof(uint16_t));
         break;
       case 22:
-        dataa = off;
+        acionarInfravermelho(off, sizeof(off) / sizeof(uint16_t));
         break;
     }
   }
@@ -1653,7 +1663,6 @@ void captive_portal_setup() {
     capcount=capcount+1;
     webServer.send(HTTP_CODE, "text/html", posted());
     M5.Beep.tone(4000);
-    M5.Lcd.print("Victim Login");
     delay(50);
     M5.Beep.mute();
     BLINK();
@@ -1731,6 +1740,7 @@ void qrmenu_loop() {
 
 /// ENTRY ///
 void setup() {
+  Serial.begin(9600);
   M5.begin();
   #if defined(USE_EEPROM)
     EEPROM.begin(EEPROM_SIZE);
