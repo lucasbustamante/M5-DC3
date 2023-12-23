@@ -29,6 +29,7 @@ String buildver="1.0.3";
 #include <BLEUtils.h>
 #include <BLEServer.h>
 #include "captive_page.h"
+#include "tuner.h"
 
 
 int advtime = 0; 
@@ -71,6 +72,7 @@ struct MENU {
 // 18 - QR Codes
 // 19 - Captive Portal
 // 20 - PixMob
+// 21 - Tuner
 
 struct QRCODE {
   char name[19];
@@ -139,6 +141,7 @@ MENU mmenu[] = {
   { "Captive Portal", 19},
   { "QR Codes", 18},
   { "Pixmob", 20},
+  { "Tuner", 21},
   { "Settings", 2},
   
 };
@@ -921,12 +924,21 @@ void pixmob_loop(){
 
 
 
+void tuner_setup() {
+  M5.begin();
+  M5.Lcd.setRotation(0);
+  M5.Lcd.fillScreen(BLACK);
+  M5.Lcd.setTextColor(WHITE, BLACK);
+  M5.Lcd.setSwapBytes(true);
 
+  i2sInit();
+  xTaskCreate(mic_record_task, "mic_record_task", 2048, NULL, 1, NULL);
+}
 
+void tuner_loop() {
+  vTaskDelay(10000 / portTICK_RATE_MS);  // otherwise the main task wastes half
 
-
-
-
+}
 
 
 
@@ -1874,6 +1886,9 @@ void loop() {
       case 20:
         pixmob_setup();
         break;
+      case 21:
+        tuner_setup();
+        break;
     }
   }
 
@@ -1948,6 +1963,9 @@ void loop() {
       break;
     case 20:
         pixmob_loop();
+        break;
+    case 21:
+        tuner_loop();
         break;
   }
 }
